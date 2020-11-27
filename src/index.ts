@@ -1,12 +1,14 @@
-import { AxiosRequestConfig } from './types/index'
+import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './types/index'
 import xhr from './xhr'
 import { buildURL } from './helper/url'
-import { tranformRequest } from './helper/data'
+import { tranformRequest, tranformResponse } from './helper/data'
 import { processHeaders } from './helper/header'
 
-export default function axios ( config: AxiosRequestConfig ): void {
+export default function axios ( config: AxiosRequestConfig ): AxiosPromise {
   processConfig(config)
-  xhr(config)
+  return xhr(config).then((res) => {
+    return tranformResponseData(res)
+  })
 }
 
 //处理url
@@ -31,6 +33,14 @@ function transformRequestHeader (config: AxiosRequestConfig): any {
   const { headers= {}, data } = config
   return processHeaders(headers, data)
 }
+
+//处理data 变成对象
+function tranformResponseData (res: AxiosResponse): AxiosResponse {
+  res.data = tranformResponse(res.data)
+  return res
+}
+
+
 
 
 

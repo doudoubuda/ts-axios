@@ -23,3 +23,25 @@ export function processHeaders (headers: any, data: any): any {
 
     return headers
 }
+
+//处理响应数据里面的header string -> object
+export function parseResponseHeaders (header: string): any {
+    let parsed = Object.create(null)
+    if (!header) {
+        return parsed
+    }
+    
+    header.split('\r\n').forEach(line => {
+        let [key, val] = line.split(':')
+        key = key.trim().toLowerCase()
+        if( !key) {
+            return
+        }
+        if(val) {
+            val = val.trim()
+        }
+        parsed[key] = val
+    });
+
+    return parsed
+}
