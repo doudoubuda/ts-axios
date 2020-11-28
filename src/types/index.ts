@@ -1,3 +1,6 @@
+import { timeouts } from "retry";
+import { request } from "http";
+
 // 公共类型定义文件
 
 //字面量类型
@@ -15,7 +18,8 @@ export interface AxiosRequestConfig {
     data?: any
     params?: any
     headers?: any
-    responseType: XMLHttpRequestResponseType
+    responseType: XMLHttpRequestResponseType,
+    timeout: number
 }
 
 // type XMLHttpRequestResponseType = '' || 'arrayBuffer' || 'blob' || 'documet' || 'json' || 'text'
@@ -30,4 +34,12 @@ export interface AxiosResponse {
 
 export interface AxiosPromise extends Promise<AxiosResponse> {
 
+}
+
+export interface AxiosError extends Error {
+    isAxiosError: boolean
+    config: AxiosRequestConfig
+    code?: string|null
+    request: any
+    response: AxiosResponse
 }
